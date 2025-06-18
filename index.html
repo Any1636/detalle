@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Te Amo 💖</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(to right, #ffb6c1, #ffe4e1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container, #rompecabezas-section, #final-message {
+      text-align: center;
+    }
+
+    .osito {
+      width: 150px;
+      animation: bounce 2s infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .pantalla {
+      background: #fff;
+      border: 2px solid #ccc;
+      padding: 10px;
+      font-size: 24px;
+      width: 200px;
+      margin: 10px auto;
+      border-radius: 8px;
+    }
+
+    .calculadora {
+      display: grid;
+      grid-template-columns: repeat(3, 70px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .calculadora button {
+      font-size: 20px;
+      padding: 15px;
+      background: #ff69b4;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .calculadora button:hover {
+      background: #ff1493;
+    }
+
+    .puzzle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .puzzle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 2px;
+    }
+
+    .puzzle-piece {
+      width: 100px;
+      height: 100px;
+      background-size: 300px 300px;
+      border: 1px solid white;
+      cursor: grab;
+    }
+
+    .muestra {
+      width: 150px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px pink;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    #final-message {
+      animation: fadeIn 3s forwards;
+      text-align: center;
+    }
+
+    #final-image {
+      width: 300px;
+      border-radius: 10px;
+    }
+
+    .mensaje {
+      font-size: 24px;
+      color: #c71585;
+      margin-top: 15px;
+      animation: heartBeat 2s infinite;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN CON CALCULADORA -->
+  <div id="login" class="login-container">
+    <img src="img/osito.jpg" alt="Osito animado" class="osito" />
+    <h2>Marca la fecha de nuestro aniversario 💞</h2>
+    <div class="pantalla" id="pantalla">____</div>
+    <div class="calculadora">
+      <button onclick="agregarNumero('1')">1</button>
+      <button onclick="agregarNumero('2')">2</button>
+      <button onclick="agregarNumero('3')">3</button>
+      <button onclick="agregarNumero('4')">4</button>
+      <button onclick="agregarNumero('5')">5</button>
+      <button onclick="agregarNumero('6')">6</button>
+      <button onclick="agregarNumero('7')">7</button>
+      <button onclick="agregarNumero('8')">8</button>
+      <button onclick="agregarNumero('9')">9</button>
+      <button onclick="borrar()">⌫</button>
+      <button onclick="agregarNumero('0')">0</button>
+      <button onclick="checkPIN()">✔️</button>
+    </div>
+  </div>
+
+  <!-- ROMPECABEZAS -->
+  <div id="rompecabezas-section" class="hide">
+    <h2>¡Arma este recuerdo especial! 💘</h2>
+    <div class="puzzle-container">
+      <div id="puzzle" class="puzzle-grid"></div>
+      <img src="img/foto1.jpg" alt="Muestra" class="muestra" />
+    </div>
+  </div>
+
+  <!-- MENSAJE FINAL -->
+  <div id="final-message" class="hide">
+    <img id="final-image" src="img/foto1.jpg" />
+    <p class="mensaje">Siempre serás mi pieza favorita 💞</p>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    let input = "";
+    const pantalla = document.getElementById("pantalla");
+    const correctPIN = "1234"; // Cambia esto por tu fecha real
+
+    function agregarNumero(num) {
+      if (input.length < 4) {
+        input += num;
+        pantalla.textContent = input.padEnd(4, "_");
+      }
+    }
+
+    function borrar() {
+      input = input.slice(0, -1);
+      pantalla.textContent = input.padEnd(4, "_");
+    }
+
+    function checkPIN() {
+      if (input === correctPIN) {
+        document.getElementById("login").classList.add("hide");
+        document.getElementById("rompecabezas-section").classList.remove("hide");
+        createPuzzle();
+      } else {
+        alert("Ups... ¿seguro que ese es nuestro aniversario? 🥺");
+        input = "";
+        pantalla.textContent = "____";
+      }
+    }
+
+    function createPuzzle() {
+      const puzzle = document.getElementById("puzzle");
+      puzzle.innerHTML = "";
+      const pieces = [];
+
+      for (let i = 0; i < 9; i++) {
+        const piece = document.createElement("div");
+        piece.className = "puzzle-piece";
+        const x = (i % 3) * -100;
+        const y = Math.floor(i / 3) * -100;
+        piece.style.backgroundImage = "url('img/foto1.jpg')";
+        piece.style.backgroundPosition = `${x}px ${y}px`;
+        piece.setAttribute("draggable", true);
+        piece.dataset.index = i;
+        pieces.push(piece);
+      }
+
+      shuffleArray(pieces).forEach(piece => puzzle.appendChild(piece));
+      enableDragAndDrop();
+    }
+
+    function enableDragAndDrop() {
+      const pieces = document.querySelectorAll(".puzzle-piece");
+
+      pieces.forEach(piece => {
+        piece.addEventListener("dragstart", e => {
+          e.dataTransfer.setData("text/plain", e.target.dataset.index);
+        });
+
+        piece.addEventListener("dragover", e => e.preventDefault());
+
+        piece.addEventListener("drop", e => {
+          e.preventDefault();
+          const from = e.dataTransfer.getData("text/plain");
+          const to = e.target.dataset.index;
+
+          const puzzle = document.getElementById("puzzle");
+          const fromEl = Array.from(puzzle.children).find(p => p.dataset.index === from);
+          const toEl = e.target;
+
+          puzzle.insertBefore(fromEl, toEl);
+          puzzle.insertBefore(toEl, fromEl.nextSibling);
+
+          checkCompletion();
+        });
+      });
+    }
+
+    function checkCompletion() {
+      const pieces = document.querySelectorAll(".puzzle-piece");
+      const isCorrect = Array.from(pieces).every((piece, idx) => piece.dataset.index == idx);
+      if (isCorrect) {
+        document.getElementById("rompecabezas-section").classList.add("hide");
+        document.getElementById("final-message").classList.remove("hide");
+      }
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+  </script>
+</body>
+</html>
